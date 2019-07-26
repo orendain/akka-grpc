@@ -1,0 +1,38 @@
+buildscript {
+  repositories {
+    gradlePluginPortal()
+  }
+
+  dependencies {
+    classpath group: 'gradle.plugin.com.lightbend.akka.grpc', name: 'akka-grpc-gradle-plugin', version: akkaGrpcVersion
+  }
+}
+
+plugins {
+  id 'java'
+  id 'application'
+}
+
+apply plugin: 'com.lightbend.akka.grpc.gradle'
+
+repositories {
+  jcenter()
+}
+
+// Define a separate configuration for managing the dependency on Jetty ALPN agent.
+configurations {
+  alpnagent
+}
+
+dependencies {
+  implementation group: 'com.google.protobuf', name: 'protobuf-java', version: protobufVersion
+  implementation group: 'com.google.protobuf', name: 'protoc', version: protobufVersion
+
+  compile group: 'com.google.protobuf', name: 'protobuf-java', version: protobufVersion
+  compile group: 'com.google.protobuf', name: 'protoc', version: protobufVersion
+
+  // Configuration for modules that use Jetty ALPN agent
+  alpnagent group: 'org.mortbay.jetty.alpn', name: 'jetty-alpn-agent', version: alpnaAgentVersion
+}
+
+mainClassName = 'Main'

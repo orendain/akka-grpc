@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ai.h2o.deploy";
+option java_outer_classname = "DeploymentServiceProto";
+
+package ai.h2o.deploy;
+
+import "api/proto/v1/deployment.proto";
+import "api/proto/v1/listing2.proto";
+
+service DeploymentService {
+  rpc ListDeployments (ListDeploymentsRequest) returns (ListDeploymentsResponse) {}
+
+  rpc SearchDeployments (SearchDeploymentsRequest) returns (SearchDeploymentsResponse) {}
+
+  rpc GetDeployment (GetDeploymentRequest) returns (GetDeploymentResponse) {}
+}
+
+message ListDeploymentsRequest {
+  PagingRequest paging = 1;
+
+  // The view the server should respond with.
+  // I.e., the fields to include in the response.
+  DeploymentView view = 2;
+}
+
+message ListDeploymentsResponse {
+  PagingResponse paging = 1;
+
+  repeated Deployment deployment = 2;
+}
+
+message SearchDeploymentsRequest {
+  // Server only returns deployments associated with the specified project ID.
+  string project_id = 1;
+
+  PagingRequest paging = 2;
+
+  // The view the server should respond with.
+  DeploymentView view = 3;
+}
+
+message SearchDeploymentsResponse {
+  PagingResponse paging = 1;
+
+  repeated Deployment deployment = 2;
+}
+
+message GetDeploymentRequest {
+  // The unique id of the Deployment to retrieve.
+  string id = 1;
+
+  // The view the server should respond with.
+  DeploymentView view = 2;
+}
+
+message GetDeploymentResponse { Deployment deployment = 1;}
+
+enum DeploymentView {
+  // Not specified, equivalent to BASIC.
+  DEPLOYMENT_VIEW_UNSPECIFIED = 0;
+
+  // Server response includes only the following Deployment fields:
+  // Unique deployment ID and DeploymentState.
+  BASIC = 1;
+
+  // All Deployment fields are returned in this view.
+  FULL = 2;
+}

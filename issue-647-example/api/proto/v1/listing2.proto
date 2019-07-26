@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ai.h2o.deploy";
+option java_outer_classname = "ListingProto2";
+
+package ai.h2o.deploy;
+
+// Borrowed from:
+// https://github.com/h2oai/h2oai-storage/blob/master/api/proto/v1/listing.proto
+
+// Generic paging request portion needed for listing in presence of concurrent
+// modifications.
+message PagingRequest {
+  // Requested number of records to be returned.
+  // Note that fewer records may be returned due to server-side restrictions or
+  // simply if there
+  // are no more records in on the server.
+  int32 page_size = 1;
+  // Use PagingResponse.next_page_token here to continue with the next record
+  // under any given
+  // filter and sorting.
+  bytes page_token = 2;
+}
+
+// Generic paging response portion needed for listing in presence of concurrent
+// modifications.
+message PagingResponse {
+  // An opaque token to be sent together with the next listing request to
+  // continue with the
+  // next record under any given filter and sorting. This token should not be
+  // interpreted by the
+  // client and its structure may change without any prior notice.
+  bytes next_page_token = 1;
+}

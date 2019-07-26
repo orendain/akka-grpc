@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ai.h2o.deploy";
+option java_outer_classname = "DeploymentProto";
+
+package ai.h2o.deploy;
+
+import "google/protobuf/timestamp.proto";
+
+// Represents a deployed model in an environment.
+message Deployment {
+  // The unique ID of this deployment.
+  // Field is included in the DeploymentStatusView.BASIC view.
+  string id = 1;
+
+  // The experiment this deployment is linked to.
+  string experiment_id = 2;
+
+  // State of the deployment.
+  // Field is included in the DeploymentStatusView.BASIC view.
+  DeploymentState state = 3;
+
+  // Endpoint of the deployment in the form <ip/host>:<port>.
+  // This is the empty string when the endpoint is not available.
+  string model_endpoint = 4;
+
+  // Endpoint of the generated Grafana dashboard in the form <ip/host>:<port>.
+  string grafana_endpoint = 5;
+
+  // Misc. reason or status message - no reason set currently defined.
+  // E.g., Invalid/ExpiredKubernetesCredentials, InsufficientClusterResources.
+  string reason = 6;
+
+  // Time the deployment was launched.
+  google.protobuf.Timestamp created_time = 7;
+}
+
+// The possible progression of states:
+//
+// LAUNCHING  ::> RUNNING | ERROR
+// RUNNING    ::> UPDATING | TERMINATED | ERROR
+// ERROR      ::> RUNNING | TERMINATED
+// TERMINATED ::> {}
+enum DeploymentState {
+  // State not specified.
+  // This is currently not expected to be encountered.
+  DEPLOYMENT_STATE_UNSPECIFIED = 0;
+
+  // In the process of launching for the first time.
+  LAUNCHING = 1;
+
+  // Up and running, and able to score.
+  RUNNING = 2;
+
+  // Has been terminated via the normal protocols.
+  // E.g., does not include terminal failures.
+  TERMINATED = 3;
+
+  // Has been determined to be in an erroneous state.
+  // E.g., deployment could not be launched, or license expired.
+  ERROR = 4;
+}

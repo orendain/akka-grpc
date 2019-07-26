@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ai.h2o.deploy";
+option java_outer_classname = "VersionServiceProto2";
+
+package ai.h2o.deploy;
+
+// Borrowed from:
+// https://github.com/h2oai/h2oai-storage/blob/master/api/proto/v1/version_service.proto
+
+import "google/protobuf/empty.proto";
+
+service VersionService {
+  rpc GetVersion(google.protobuf.Empty) returns (GetVersionResponse) {}
+}
+
+message GetVersionResponse { ServerVersion version = 1; }
+
+message ServerVersion { string build_version = 1; }

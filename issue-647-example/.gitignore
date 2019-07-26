@@ -1,0 +1,16 @@
+# Idea
+.idea/
+*.iml
+
+# Gradle-related ignores
+.gradle
+build
+out
+
+# JVM-related ignores
+*.class
+target/
+
+# OS
+.DS_Store
+Thumbs.db

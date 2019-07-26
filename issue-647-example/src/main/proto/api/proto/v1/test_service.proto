@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+//option java_package = "com.orendainx";
+
+package com.orendainx;
+
+import "api/proto/v1/test_message.proto";
+
+service TestService {
+  rpc ListDeployments (ListDeploymentsRequest) returns (ListDeploymentsResponse) {}
+}
+
+message ListDeploymentsRequest {}
+
+message ListDeploymentsResponse {}
